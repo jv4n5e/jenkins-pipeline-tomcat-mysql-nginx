@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build Application') {
             steps {
-                sh 'mvn -f wewbapp/pom.xml clean package'
+                sh 'mvn -f webapp/pom.xml clean package'
             }
             post {
                 success {
