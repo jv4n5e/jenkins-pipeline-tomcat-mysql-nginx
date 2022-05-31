@@ -15,7 +15,9 @@ pipeline {
 
        stage('Cleaning Docker (removing all unused containers)'){
             steps {
-                sh 'docker container rm $(docker container ls -a | grep -v "Up " | awk '(NR>1)' | awk '{print $1}')'
+                sh '''
+                    docker container rm $(docker container ls -a | grep -v "Up " | awk '(NR>1)' | awk '{print $1}')
+                '''
             }
         }
 
