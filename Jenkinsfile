@@ -21,6 +21,9 @@ pipeline {
             }
         }
 
+        //TODO: Find out if the unused containers had any custom network in place
+        //  If so, remove them as well.
+
         stage('Create Tomcat Docker Image'){
             steps {
                 sh "pwd"
@@ -31,7 +34,7 @@ pipeline {
 
         stage('Deploy Tomcat Docker Image (port 8090)'){
             steps {
-                sh "docker container run --publish 8090:8080 --detach --name tomcat-8090 tomcatsamplewebapp:${env.BUILD_ID}"
+                sh "docker container run --publish 8090:8080 --detach --name tomcat-8090 --network tomcatnet tomcatsamplewebapp:${env.BUILD_ID}"
             }
         }
 
@@ -43,7 +46,7 @@ pipeline {
 
         stage('Deploy MySQL Docker Image (port 3306)'){
             steps {
-                sh "docker container run --publish 3306:3306 --detach --name mysql-3306 mysqlsample:${env.BUILD_ID}"
+                sh "docker container run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet mysqlsample:${env.BUILD_ID}"
             }
         }
 
@@ -55,7 +58,7 @@ pipeline {
 
         stage('Deploy nginx Docker Image (port 80)'){
             steps {
-                sh "docker container run --publish 80:80 --detach --name nginx-80 nginxsample:${env.BUILD_ID}"
+                sh "docker container run --publish 80:80 --detach --name nginx-80 --network nginxnet nginxsample:${env.BUILD_ID}"
             }
         }
 
