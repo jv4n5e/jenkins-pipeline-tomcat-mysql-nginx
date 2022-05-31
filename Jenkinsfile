@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+       stage('Cleaning Docker (removing all unused containers)'){
+            steps {
+                sh "docker container rm $(docker container ls -a | grep -v "Up " | awk '(NR>1)' | awk '{print $1}')"
+            }
+        }
+
         stage('Create Tomcat Docker Image'){
             steps {
                 sh "pwd"
@@ -21,19 +27,33 @@ pipeline {
             }
         }
 
+        stage('Deploy Tomcat Docker Image (port 8090)'){
+            steps {
+                sh "docker container run --publish 8090:8080 --detach --name tomcat-8090 tomcatsamplewebapp:${env.BUILD_ID}"
+            }
+        }
+
         stage('Create MySQL Docker Image'){
             steps {
-                sh "pwd"
-                sh "ls -a"
                 sh "docker build mysql -t mysqlsample:${env.BUILD_ID}"
+            }
+        }
+
+        stage('Deploy MySQL Docker Image (port 3306)'){
+            steps {
+                sh "docker container run --publish 3306:3306 --detach --name mysql-3306 mysqlsample:${env.BUILD_ID}"
             }
         }
 
         stage('Create nginx Docker Image'){
             steps {
-                sh "pwd"
-                sh "ls -a"
                 sh "docker build nginx -t nginxsample:${env.BUILD_ID}"
+            }
+        }
+
+        stage('Deploy nginx Docker Image (port 80)'){
+            steps {
+                sh "docker container run --publish 80:80 --detach --name nginx-80 nginxsample:${env.BUILD_ID}"
             }
         }
     }
