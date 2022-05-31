@@ -31,7 +31,8 @@ pipeline {
 
         stage('Deploy Tomcat Docker Image (port 8090)'){
             steps {
-                sh "docker container run --publish 8090:8080 --detach --name tomcat-8090 tomcatsamplewebapp:${env.BUILD_ID}"
+                sh "docker container run -it --publish 8090:8080 --name tomcat-8090 tomcatsamplewebapp:${env.BUILD_ID}"
+                sh "whoami"
             }
         }
 
@@ -43,7 +44,8 @@ pipeline {
 
         stage('Deploy MySQL Docker Image (port 3306)'){
             steps {
-                sh "docker container run --publish 3306:3306 --detach --name mysql-3306 mysqlsample:${env.BUILD_ID}"
+                sh "docker container run -it --publish 3306:3306 --name mysql-3306 mysqlsample:${env.BUILD_ID}"
+                sh "whoami"
             }
         }
 
@@ -55,7 +57,15 @@ pipeline {
 
         stage('Deploy nginx Docker Image (port 80)'){
             steps {
-                sh "docker container run --publish 80:80 --detach --name nginx-80 nginxsample:${env.BUILD_ID}"
+                sh "docker container run -it --publish 80:80 --name nginx-80 nginxsample:${env.BUILD_ID}"
+                sh "whoami"
+            }
+        }
+
+        stage('Approval to kill'){
+            steps {
+                input "Can we kill the running containers?"
+                sh "docker container rm nginx-80 mysql-3306 tomcat-8090 -f"
             }
         }
     }
