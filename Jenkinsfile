@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh "pwd"
                 sh "ls -a"
-                sh "docker build ../webapp -t tomcatsamplewebapp:${env.BUILD_ID}"
+                sh "docker build webapp -t tomcatsamplewebapp:${env.BUILD_ID}"
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh "pwd"
                 sh "ls -a"
-                sh "docker build ../mysql -t mysqlsample:${env.BUILD_ID}"
+                sh "docker build mysql -t mysqlsample:${env.BUILD_ID}"
             }
         }
 
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 sh "pwd"
                 sh "ls -a"
-                sh "docker build ../nginx -t nginxsample:${env.BUILD_ID}"
+                sh "docker build nginx -t nginxsample:${env.BUILD_ID}"
             }
         }
     }
