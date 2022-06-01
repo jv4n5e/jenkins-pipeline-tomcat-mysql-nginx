@@ -80,14 +80,18 @@ pipeline {
 
         stage('Approval to kill'){
             steps {
-                input "Can we kill the running containers and their networks?"
-                sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
+                input "Can we stop and remove the running containers along with their networks?"
+                sh "docker container stop nginx-80 mysql-3306 tomcat-8090 pythoncustom || true"
+                sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f"
+                sh "docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
             }
         }
     }
     post {
         failure {
-            sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
+            sh "docker container stop nginx-80 mysql-3306 tomcat-8090 pythoncustom || true"
+            sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f"
+            sh "docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
         }
     }
 }
