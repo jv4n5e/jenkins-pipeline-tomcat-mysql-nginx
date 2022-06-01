@@ -5,4 +5,4 @@ LABEL maintainer="juanse18_7@hotmail.com"
 
 ADD sample.py /
 
-CMD [ "python", "./sample.py" ]
+CMD [ "python", "./diamond.py" ]
