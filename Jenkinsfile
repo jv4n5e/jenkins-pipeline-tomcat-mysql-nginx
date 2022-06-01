@@ -65,7 +65,7 @@ pipeline {
 
         stage('Deploy custom Python Docker Image with its own VPN'){
             steps {
-                sh "docker network create pythonnet; docker container run --publish 3306:3306 --detach --name pythoncustom --network pythonnet pythoncustom:1.0;"
+                sh "docker network create pythonnet; docker container run --detach --name pythoncustom --network pythonnet pythoncustom:1.0;"
             }
         }
 
@@ -77,8 +77,8 @@ pipeline {
         }
     }
     post {
-    failure {
-      sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
+        failure {
+            sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
+        }
     }
-  }
 }
