@@ -65,7 +65,7 @@ pipeline {
 
         stage('Deploy custom Python Docker Image with its own VPN'){
             steps {
-                sh "docker network create pythonnet; docker container run --detach --name pythoncustom --network pythonnet pythoncustom:1.0;"
+                sh "docker network create pythonnet; docker container run --name pythoncustom --network pythonnet pythoncustom:1.0;"
             }
         }
 
