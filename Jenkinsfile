@@ -32,7 +32,9 @@ pipeline {
                 sh "docker network create nginxnet"
                 sh "mkdir -p nginxbind"
                 sh "cd nginxbind"
-                sh "docker run --publish 80:80 --detach --name nginx-80 ---mount type=bind,source=$(pwd),target=/app -network nginxnet nginxcustom:1.0"
+                sh '''
+                    docker run --publish 80:80 --detach --name nginx-80 ---mount type=bind,source=$(pwd),target=/app -network nginxnet nginxcustom:1.0
+                '''
             }
         }
         
