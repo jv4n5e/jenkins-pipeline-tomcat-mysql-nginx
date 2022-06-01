@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build Ubuntu Docker image') {
             steps {
-                sh 'docker image build -t ubuntuaio:1.0 ubuntuaio'
+                sh 'docker image build -t ubuntuaio:1.0 ubuntu-aio'
             }
         }
         stage('Running the Docker image') {
