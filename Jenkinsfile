@@ -54,7 +54,7 @@ pipeline {
 
         stage('Create MySQL Docker Image'){
             steps {
-                sh "docker build mysql:5.7 -t mysqlsample:${env.BUILD_ID};"
+                sh "docker build mysql -t mysqlsample:${env.BUILD_ID};"
             }
         }
 
