@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Running the Docker image') {
             steps{
-                sh "docker container run --publish 80:80 --detach --name ubuntu-aio-80 ubuntu-aio:${env.BUILD_ID};"
+                sh "docker container run --publish 80:80 --detach --name ubuntu-aio-80 ubuntu-aio:1.0;"
             }
         }
     }
