@@ -62,8 +62,8 @@ pipeline {
 
         stage('Approval to kill'){
             steps {
-                input "Can we kill the running containers?"
-                sh "docker container rm nginx-80 mysql-3306 tomcat-8090 -f"
+                input "Can we kill the running containers and their networks?"
+                sh "docker container rm nginx-80 mysql-3306 tomcat-8090 -f; docker network rm nginxnet mysqlnet tomcatnet || true"
             }
         }
     }
