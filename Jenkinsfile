@@ -54,11 +54,11 @@ pipeline {
 
         stage('Create MySQL Docker Image'){
             steps {
-                sh "docker build mysql -t mysqlsample:${env.BUILD_ID};"
+                sh "docker build mysql:5.7 -t mysqlsample:${env.BUILD_ID};"
             }
         }
 
-        stage('Deploy MySQL Docker Image (port 3306) with its own VPN'){
+        stage('Deploy MySQL Docker Image (port 3306) with its own VPN and volume mount.'){
             steps {
                 sh "docker network create mysqlnet"
                 sh "docker run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet --mount source=mysqlvolume,destination=/var/lib/mysql mysqlsample:${env.BUILD_ID};"
