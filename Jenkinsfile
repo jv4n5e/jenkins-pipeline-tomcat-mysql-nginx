@@ -78,7 +78,7 @@ pipeline {
     }
     post {
     failure {
-      "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
+      sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f; docker network rm nginxnet mysqlnet tomcatnet pythonnet || true"
     }
   }
 }
