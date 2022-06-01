@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Ubuntu Docker image') {
+            steps {
+                sh 'docker image build -t ubuntu-aio:1.0 ubuntu-aio'
+            }
+        }
+        stage('Running the Docker image') {
+            steps{
+                sh "docker container run --publish 80:80 --detach --name ubuntu-aio-80 ubuntu-aio:${env.BUILD_ID};"
+            }
+        }
+    }
+}
