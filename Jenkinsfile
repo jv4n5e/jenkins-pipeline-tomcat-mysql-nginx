@@ -87,7 +87,7 @@ pipeline {
             }
         }
     }
-    post {
+    post ('If fail, stopping and removing containers along with their networks.'){
         failure {
             sh "docker container stop nginx-80 mysql-3306 tomcat-8090 pythoncustom || true"
             sh "docker container rm nginx-80 mysql-3306 tomcat-8090 pythoncustom -f"
