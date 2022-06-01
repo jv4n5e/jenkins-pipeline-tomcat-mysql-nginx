@@ -50,13 +50,13 @@ pipeline {
 
         stage('Create nginx Docker Image'){
             steps {
-                sh "docker build nginx -t nginxsample:${env.BUILD_ID}"
+                sh "docker image build nginx -t nginxcustom:1.0"
             }
         }
 
         stage('Deploy nginx Docker Image (port 80)'){
             steps {
-                sh "docker network create nginxnet; docker container run --publish 80:80 --detach --name nginx-80 --network nginxnet nginxsample:${env.BUILD_ID};"
+                sh "docker network create nginxnet; docker container run --publish 80:80 --detach --name nginx-80 --network nginxnet nginxcustom:1.0;"
             }
         }
 
