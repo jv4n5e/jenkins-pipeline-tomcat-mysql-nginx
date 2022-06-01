@@ -27,21 +27,25 @@ pipeline {
             }
         }
 
-        stage('Deploy custom nginx Docker Image (port 80) with its own VPN'){
+        stage('Deploy custom nginx Docker Image (port 80) with its own VPN and a bind point.'){
             steps {
-                sh "docker network create nginxnet; docker run --publish 80:80 --detach --name nginx-80 --network nginxnet nginxcustom:1.0;"
+                sh "docker network create nginxnet"
+                sh "mkdir -p nginxbind"
+                sh "cd nginxbind"
+                sh "docker run --publish 80:80 --detach --name nginx-80 ---mount type=bind,source=$(pwd),target=/app -network nginxnet nginxcustom:1.0"
             }
         }
         
         stage('Create Tomcat Docker Image'){
             steps {
-                sh "pwd; ls -a; docker build webapp -t tomcatsamplewebapp:${env.BUILD_ID};"
+                sh "docker build webapp -t tomcatsamplewebapp:${env.BUILD_ID};"
             }
         }
 
         stage('Deploy Tomcat Docker Image (port 8090) with its own VPN'){
             steps {
-                sh "docker network create tomcatnet; docker run --publish 8090:8080 --detach --name tomcat-8090 --network tomcatnet tomcatsamplewebapp:${env.BUILD_ID};"
+                sh "docker network create tomcatnet"
+                sh "docker run --publish 8090:8080 --detach --name tomcat-8090 --network tomcatnet tomcatsamplewebapp:${env.BUILD_ID};"
             }
         }
 
@@ -53,7 +57,8 @@ pipeline {
 
         stage('Deploy MySQL Docker Image (port 3306) with its own VPN'){
             steps {
-                sh "docker network create mysqlnet; docker run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet --mount source=mysqlvolume,destination=/var/lib/mysql mysqlsample:${env.BUILD_ID};"
+                sh "docker network create mysqlnet"
+                sh "docker run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet --mount source=mysqlvolume,destination=/var/lib/mysql mysqlsample:${env.BUILD_ID};"
             }
         }
 
@@ -65,7 +70,8 @@ pipeline {
 
         stage('Deploy custom Python Docker Image with its own VPN'){
             steps {
-                sh "docker network create pythonnet; docker run --name pythoncustom --network pythonnet pythoncustom:1.0;"
+                sh "docker network create pythonnet"
+                sh "docker run --name pythoncustom --network pythonnet pythoncustom:1.0;"
             }
         }
 
