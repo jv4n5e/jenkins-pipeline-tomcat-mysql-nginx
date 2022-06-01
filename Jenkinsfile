@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy MySQL Docker Image (port 3306) with its own VPN'){
             steps {
-                sh "docker network create mysqlnet; docker run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet --mount source=mysqlvolume,destination=/var/lib/mysql mysqlsample:${env.BUILD_ID};"
+                sh "docker network create mysqlnet; docker run --publish 3306:3306 --detach --name mysql-3306 --network mysqlnet --mount source=mysqlvolume,destination=/var/lib/mysql/_data mysqlsample:${env.BUILD_ID};"
             }
         }
 
